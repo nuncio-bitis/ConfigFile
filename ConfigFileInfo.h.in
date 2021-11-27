@@ -1,0 +1,3 @@
+// Configured options and settings for ConfigFile
+#define ConfigFile_VERSION_MAJOR @ConfigFile_VERSION_MAJOR@
+#define ConfigFile_VERSION_MINOR @ConfigFile_VERSION_MINOR@
