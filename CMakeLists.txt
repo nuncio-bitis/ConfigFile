@@ -8,6 +8,7 @@ set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/bin)
+set(CMAKE_DOC_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/documents)
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/bin)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/bin)
 set(CMAKE_TEST_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/test)
@@ -44,3 +45,24 @@ foreach(sourceFile
     target_link_libraries(${target} PUBLIC configFile ${EXTRA_OBJS} )
     install(TARGETS ${target} DESTINATION ${CMAKE_TEST_OUTPUT_DIRECTORY} )
 endforeach(sourceFile "")
+
+
+# look for Doxygen package
+find_package(Doxygen)
+if(DOXYGEN_FOUND)
+  # exclude sqlite code
+  set(DOXYGEN_EXCLUDE_PATTERNS
+        */sqlite3/*
+  )
+  # doxygen settings can be set here, prefixed with "DOXYGEN_"
+  set(DOXYGEN_SOURCE_BROWSER YES)
+  set(DOXYGEN_EXTRACT_PRIVATE YES)
+  set(DOXYGEN_OUTPUT_DIRECTORY ${CMAKE_DOC_OUTPUT_DIRECTORY})
+  # this target will only be built if specifically asked to.
+  # run "make api-docs" to create the doxygen documentation
+  doxygen_add_docs(
+    api-docs
+    ${PROJECT_SOURCE_DIR}
+    COMMENT "Generate API-documents for ConfigFile."
+  )
+endif(DOXYGEN_FOUND)

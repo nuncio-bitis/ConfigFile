@@ -67,7 +67,7 @@ TARGETS= \
 
 ################################################################################
 
-all: $(TARGETS)
+all: $(TARGETS) doc
 
 bin/tConfigFile: test/tConfigFile.cpp ConfigFile.o $(OBJS)
 	${CC} ${CXXFLAGS} ${LDFLAGS}  -o bin/tConfigFile test/tConfigFile.cpp $(OBJS)
@@ -90,6 +90,9 @@ bin/parser: parser.cpp parser.hpp
 ConfigFile.o: source/ConfigFile.cpp
 	${CC} ${CXXFLAGS} ${LDFLAGS} -c source/ConfigFile.cpp
 
+doc:
+	doxygen
+
 ################################################################################
 
 tidy:
@@ -99,10 +102,13 @@ tidy:
 clean: tidy
 	rm -f *.o $(TARGETS)
 
-clobber: clean
+clobber: clean clean-doc
 	$(RM) -vf $(TARGETS) *.log _sample.xml
 	$(RM) -vf $(LIB_FILE)
 	@echo
+
+clean-doc:
+	$(RM) -rvf documents/html
 
 echo:
 	@echo

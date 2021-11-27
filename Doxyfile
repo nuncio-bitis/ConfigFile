@@ -1,5 +1,5 @@
 PROJECT_NAME           = "XML Configuration File Handler"
-OUTPUT_DIRECTORY       = ./doc
+OUTPUT_DIRECTORY       = ./documents
 INPUT                  = .
 EXCLUDE_PATTERNS       =
 FILE_PATTERNS          = *.cpp *.hpp *.h
