@@ -15,7 +15,6 @@ set(CMAKE_TEST_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/test)
 
 set(EXTRA_OBJS
     ${PROJECT_SOURCE_DIR}/../Tools/build/CMakeFiles/cpp_tools.dir/source/common.cpp.o
-    ${PROJECT_SOURCE_DIR}/../Tools/build/CMakeFiles/cpp_tools.dir/source/trim.cpp.o
     ${PROJECT_SOURCE_DIR}/../tinyxml2/libtinyxml2.a
 )
 
