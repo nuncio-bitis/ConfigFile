@@ -2,17 +2,17 @@
  * This file is part of the DataGatheringSystem distribution
  *   (https://github.com/nuncio-bitis/include
  * Copyright (c) 2022 James P. Parziale.
- * 
- * This program is free software: you can redistribute it and/or modify  
- * it under the terms of the GNU General Public License as published by  
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, version 3.
- * 
- * This program is distributed in the hope that it will be useful, but 
- * WITHOUT ANY WARRANTY; without even the implied warranty of 
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU 
+ *
+ * This program is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
  * General Public License for more details.
- * 
- * You should have received a copy of the GNU General Public License 
+ *
+ * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 /*******************************************************************************
@@ -49,10 +49,10 @@
  * The XML data is not written back to the file until the ConfigFile object is destroyed,
  * and then only if any data has changed.
  */
-class ConfigFile {
+class ConfigFile
+{
     //-------------------------------------------------------------------------
 public:
-
     ConfigFile();
     ~ConfigFile();
 
@@ -119,7 +119,6 @@ public:
 
     //-------------------------------------------------------------------------
 private:
-
     // Private data
 
     /**
@@ -164,7 +163,6 @@ private:
      */
     tinyxml2::XMLNode *findNode(tinyxml2::XMLNode *node, std::string optionName = "", std::string parentNs = "");
 
-
     /**
      * Recursively print the DOM tree info under the given node.
      * @param node
@@ -173,7 +171,6 @@ private:
      *   Level of indentation used for debug output.
      */
     void printNodeTree(tinyxml2::XMLNode *node, std::string indent = "  ");
-
 
     /**
      * Write back to the XML file.

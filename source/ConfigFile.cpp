@@ -2,17 +2,17 @@
  * This file is part of the DataGatheringSystem distribution
  *   (https://github.com/nuncio-bitis/source
  * Copyright (c) 2022 James P. Parziale.
- * 
- * This program is free software: you can redistribute it and/or modify  
- * it under the terms of the GNU General Public License as published by  
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, version 3.
- * 
- * This program is distributed in the hope that it will be useful, but 
- * WITHOUT ANY WARRANTY; without even the implied warranty of 
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU 
+ *
+ * This program is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
  * General Public License for more details.
- * 
- * You should have received a copy of the GNU General Public License 
+ *
+ * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 /*******************************************************************************
@@ -61,9 +61,10 @@ const std::string ConfigFile::cUNAVAILABLE("N/A");
 ConfigFile::ConfigFile()
     : xmlDocChanged(false), xmlErrorId(0), m_DocumentRoot(NULL)
 {
-    std::cout << "ConfigFile::ConfigFile()" << " Version " << ConfigFile_VERSION_MAJOR << "."
-              << ConfigFile_VERSION_MINOR << std::endl << std::endl;
-
+    std::cout << "ConfigFile::ConfigFile()"
+              << " Version " << ConfigFile_VERSION_MAJOR << "."
+              << ConfigFile_VERSION_MINOR << std::endl
+              << std::endl;
 }
 
 //******************************************************************************
@@ -75,20 +76,24 @@ ConfigFile::ConfigFile()
  */
 ConfigFile::~ConfigFile()
 {
-  // If data has changed, save the XML document to a file (based on the input filename).
-  if (xmlDocChanged) {
-    char *baseFilename = basename((char *)xmlFilename.c_str());
-    xmlFilename = baseFilename;
+    // If data has changed, save the XML document to a file (based on the input filename).
+    if (xmlDocChanged)
+    {
+        char *baseFilename = basename((char *)xmlFilename.c_str());
+        xmlFilename = baseFilename;
 
-    std::cout << "Writing XML Doc _" << xmlFilename << " ..." << std::endl;
-    std::string tempName("_" + xmlFilename);
-    if (outputXml(xmlDoc, tempName)) {
-        std::cout << "XML Doc written successfully." << std::endl;
-    } else {
-        std::cerr << "ERROR: Could not write XML file." << std::endl;
+        std::cout << "Writing XML Doc _" << xmlFilename << " ..." << std::endl;
+        std::string tempName("_" + xmlFilename);
+        if (outputXml(xmlDoc, tempName))
+        {
+            std::cout << "XML Doc written successfully." << std::endl;
+        }
+        else
+        {
+            std::cerr << "ERROR: Could not write XML file." << std::endl;
+        }
     }
-  }
-  std::cerr << std::endl;
+    std::cerr << std::endl;
 }
 
 //******************************************************************************
@@ -99,7 +104,8 @@ int ConfigFile::LoadFile(const std::string filename)
 
     // Check if file is good. tinyxml2 crashes if the file doesn't exist.
     std::ifstream f(xmlFilename.c_str(), std::ios::in);
-    if (!f.good()) {
+    if (!f.good())
+    {
         xmlErrorId = tinyxml2::XML_ERROR_FILE_COULD_NOT_BE_OPENED;
         std::cerr << "ERROR: Could not open file '" << xmlFilename << "'" << std::endl;
         return EXIT_FAILURE;
@@ -115,7 +121,8 @@ int ConfigFile::LoadFile(const std::string filename)
     }
 
     m_DocumentRoot = xmlDoc.RootElement();
-    if (!m_DocumentRoot) {
+    if (!m_DocumentRoot)
+    {
         std::cerr << "ERROR: XML file has no document root node." << std::endl;
         return EXIT_FAILURE;
     }
@@ -136,16 +143,18 @@ int ConfigFile::LoadFile(const std::string filename)
 void ConfigFile::printConfigFile(void)
 {
     std::cout << std::endl;
-    //xmlDoc.Print(); // Print "formatted" raw XML
-    //std::cout << std::endl;
+    // xmlDoc.Print(); // Print "formatted" raw XML
+    // std::cout << std::endl;
 
-    if (m_DocumentRoot) {
+    if (m_DocumentRoot)
+    {
         printNodeTree(m_DocumentRoot, "");
-    } else {
+    }
+    else
+    {
         std::cerr << "ERROR: Empty XML document." << std::endl;
     }
 }
-
 
 //******************************************************************************
 
@@ -158,7 +167,8 @@ void ConfigFile::printConfigFile(void)
  */
 bool ConfigFile::exists(std::string elementPath)
 {
-    if (!m_DocumentRoot) {
+    if (!m_DocumentRoot)
+    {
         std::cerr << "ERROR: Empty XML document." << std::endl;
         return false;
     }
@@ -181,18 +191,24 @@ bool ConfigFile::exists(std::string elementPath)
  */
 std::string ConfigFile::getOption(std::string elementPath)
 {
-    if (!m_DocumentRoot) {
+    if (!m_DocumentRoot)
+    {
         std::cerr << "ERROR: Empty XML document." << std::endl;
         return cUNAVAILABLE;
     }
 
     tinyxml2::XMLNode *node = findNode(m_DocumentRoot, elementPath);
-    if (node) {
+    if (node)
+    {
         // Option found as a node. Its value is its text
-        if (node->ToElement()) {
-            if (node->ToElement()->GetText()) {
+        if (node->ToElement())
+        {
+            if (node->ToElement()->GetText())
+            {
                 return node->ToElement()->GetText();
-            } else {
+            }
+            else
+            {
                 // Node exists, but has no text. Return an empty string.
                 return "";
             }
@@ -214,18 +230,22 @@ std::string ConfigFile::getOption(std::string elementPath)
  */
 std::string ConfigFile::getAttribute(std::string elementPath, std::string attribute)
 {
-    if (!m_DocumentRoot) {
+    if (!m_DocumentRoot)
+    {
         std::cerr << "ERROR: Empty XML document." << std::endl;
         return cUNAVAILABLE;
     }
 
     // Get node to option, then the attribute
     tinyxml2::XMLNode *node = findNode(m_DocumentRoot, elementPath);
-    if (node) {
+    if (node)
+    {
         // Option found as a node. Search its attributes.
-        if (node->ToElement()) {
+        if (node->ToElement())
+        {
             const tinyxml2::XMLAttribute *pAttrib = node->ToElement()->FindAttribute(attribute.c_str());
-            if (pAttrib) {
+            if (pAttrib)
+            {
                 return pAttrib->Value();
             }
         }
@@ -246,7 +266,8 @@ std::string ConfigFile::getAttribute(std::string elementPath, std::string attrib
  */
 bool ConfigFile::setOption(std::string elementPath, std::string value)
 {
-    if (!m_DocumentRoot) {
+    if (!m_DocumentRoot)
+    {
         std::cerr << "ERROR: Empty XML document." << std::endl;
         return false;
     }
@@ -255,9 +276,11 @@ bool ConfigFile::setOption(std::string elementPath, std::string value)
 
     // Find the node for the given option.
     tinyxml2::XMLNode *node = findNode(m_DocumentRoot, elementPath);
-    if (node) {
+    if (node)
+    {
         // Option found as a node. Its value is its text
-        if (node->ToElement()) {
+        if (node->ToElement())
+        {
             node->ToElement()->SetText(value.c_str());
             // Update the XML doc changed flag.
             xmlDocChanged = true;
@@ -281,7 +304,8 @@ bool ConfigFile::setOption(std::string elementPath, std::string value)
  */
 bool ConfigFile::setAttribute(std::string elementPath, std::string attribute, std::string value)
 {
-    if (!m_DocumentRoot) {
+    if (!m_DocumentRoot)
+    {
         std::cerr << "ERROR: Empty XML document." << std::endl;
         return false;
     }
@@ -290,11 +314,14 @@ bool ConfigFile::setAttribute(std::string elementPath, std::string attribute, st
 
     // Find the node for the given option.
     tinyxml2::XMLNode *node = findNode(m_DocumentRoot, elementPath);
-    if (node) {
+    if (node)
+    {
         // Option found as a node. Search its attributes.
-        if (node->ToElement()) {
+        if (node->ToElement())
+        {
             tinyxml2::XMLAttribute *pAttrib = (tinyxml2::XMLAttribute *)node->ToElement()->FindAttribute(attribute.c_str());
-            if (pAttrib) {
+            if (pAttrib)
+            {
                 pAttrib->SetAttribute(value.c_str());
                 xmlDocChanged = true;
                 ret = true;
@@ -308,7 +335,6 @@ bool ConfigFile::setAttribute(std::string elementPath, std::string attribute, st
 //******************************************************************************
 // PRIVATE METHODS
 //******************************************************************************
-
 
 /**
  * Recursively print the DOM tree info under the given node.
@@ -324,22 +350,25 @@ void ConfigFile::printNodeTree(tinyxml2::XMLNode *node, std::string indent)
     // Print node info (name, text)
     std::cout << indent << nodeElement->Name() << ":";
 
-    if (nodeElement->GetText()) {
+    if (nodeElement->GetText())
+    {
         std::string text = nodeElement->GetText();
         text = trim(text);
         std::cout << " \"" << text << "\"";
     }
     // Value is the same as Name
-    //if (nodeElement->Value()) {
+    // if (nodeElement->Value()) {
     //    std::cout << ", Value: " << nodeElement->Value();
     //}
     std::cout << std::endl;
 
     // Print node attributes (name, value)
-    const tinyxml2::XMLAttribute * attrib = nodeElement->FirstAttribute();
-    while (attrib != NULL) {
+    const tinyxml2::XMLAttribute *attrib = nodeElement->FirstAttribute();
+    while (attrib != NULL)
+    {
         std::cout << indent << "  " << attrib->Name();
-        if (attrib->Value()) {
+        if (attrib->Value())
+        {
             std::cout << " = " << attrib->Value();
         }
         std::cout << std::endl;
@@ -348,18 +377,22 @@ void ConfigFile::printNodeTree(tinyxml2::XMLNode *node, std::string indent)
 
     // Print info for children
     tinyxml2::XMLNode *child = node->FirstChild();
-    while (child != NULL) {
-        if (child->ToComment()) {
+    while (child != NULL)
+    {
+        if (child->ToComment())
+        {
             // Comment
             std::string cmt = child->ToComment()->Value();
             cmt = ReplaceAll(cmt, "\n", "\n" + indent + "#");
             std::cout << indent << "# " << cmt << std::endl;
-        } else if (child->ToElement()) {
+        }
+        else if (child->ToElement())
+        {
             // Element
             printNodeTree(child, indent + "    ");
         }
         // Text was handled with the node name above.
-        //else if (child->ToText()) {
+        // else if (child->ToText()) {
         //    // Element Text
         //    std::string text = child->ToText()->Value();
         //    text = trim(text);
@@ -389,26 +422,35 @@ tinyxml2::XMLNode *ConfigFile::findNode(tinyxml2::XMLNode *node, std::string opt
     std::string remaining;
 
     std::size_t firstDot = optionName.find_first_of(".");
-    if (firstDot == std::string::npos) {
+    if (firstDot == std::string::npos)
+    {
         nodeName = optionName;
-    } else {
+    }
+    else
+    {
         nodeName = optionName.substr(0, firstDot);
-        remaining = optionName.substr(firstDot+1);
+        remaining = optionName.substr(firstDot + 1);
     }
 
-//    std::cout << optionName << "; Looking for '" << nodeName << "' under " << node->Value() << ", remaining = " << remaining << std::endl; // XXX
+    // std::cout << optionName << "; Looking for '" << nodeName << "' under " << node->Value() << ", remaining = " << remaining << std::endl; // XXX
 
     // Find in this node's direct children
     tinyxml2::XMLNode *child = node->FirstChild();
-    while (child != NULL) {
-        if (child->ToElement()) {
-//            std::cout << "(child) " << child->Value() << "???" << std::endl; // XXX
-            if (child->Value() == nodeName) {
-//                std::cout << "FOUND " << nodeName << std::endl; // XXX
-//                std::cout << "  remaining = '" << remaining << "', " << remaining.size() << std::endl; // XXX
-                if (remaining.size() == 0) {
+    while (child != NULL)
+    {
+        if (child->ToElement())
+        {
+            // std::cout << "(child) " << child->Value() << "???" << std::endl; // XXX
+            if (child->Value() == nodeName)
+            {
+                // std::cout << "FOUND " << nodeName << std::endl; // XXX
+                // std::cout << "  remaining = '" << remaining << "', " << remaining.size() << std::endl; // XXX
+                if (remaining.size() == 0)
+                {
                     return child;
-                } else {
+                }
+                else
+                {
                     return findNode(child, remaining);
                 }
             }
@@ -416,20 +458,20 @@ tinyxml2::XMLNode *ConfigFile::findNode(tinyxml2::XMLNode *node, std::string opt
         child = child->NextSibling();
     }
 
-//    // Recursively parse this node's direct children
-//    child = node->FirstChild();
-//    while (child != NULL) {
-//        if (child->ToElement()) {
-//            std::cout << "(child) " << child->ToElement()->Name() << "???" << std::endl; // XXX
-//            // Element
-//            if (child->ToElement()->Name() == nodeName) {
-//                std::cout << "FOUND " << nodeName << std::endl; // XXX
-//                return child->ToElement();
-//            }
-//            findNode(child, remaining);
-//        }
-//        child = child->NextSibling();
-//    }
+    //// Recursively parse this node's direct children
+    // child = node->FirstChild();
+    // while (child != NULL) {
+    //     if (child->ToElement()) {
+    //         std::cout << "(child) " << child->ToElement()->Name() << "???" << std::endl; // XXX
+    //         // Element
+    //         if (child->ToElement()->Name() == nodeName) {
+    //             std::cout << "FOUND " << nodeName << std::endl; // XXX
+    //             return child->ToElement();
+    //         }
+    //         findNode(child, remaining);
+    //     }
+    //     child = child->NextSibling();
+    // }
 
     return NULL;
 
@@ -509,12 +551,12 @@ tinyxml2::XMLNode *ConfigFile::findNode(tinyxml2::XMLNode *node, std::string opt
 #endif
 } // end findNode
 
-
 //******************************************************************************
 
 bool ConfigFile::outputXml(tinyxml2::XMLDocument &myDocument, std::string filePath)
 {
-    if (myDocument.SaveFile(filePath.c_str()) != tinyxml2::XML_SUCCESS) {
+    if (myDocument.SaveFile(filePath.c_str()) != tinyxml2::XML_SUCCESS)
+    {
         std::cerr << "ERROR: Couldn't write XML document" << std::endl;
         return false;
     }
