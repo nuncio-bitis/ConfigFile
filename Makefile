@@ -105,6 +105,7 @@ clean: tidy
 clobber: clean clean-doc
 	$(RM) -vf $(TARGETS) *.log _sample.xml
 	$(RM) -vf $(LIB_FILE)
+	$(RM) -vfr build/[cC][mM]ake* build/Makefile
 	@echo
 
 clean-doc:
